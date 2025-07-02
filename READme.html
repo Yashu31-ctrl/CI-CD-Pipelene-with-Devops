@@ -1,0 +1,131 @@
+import React from "react";
+import { CheckCircle, Clock, Zap, GitBranch, PlayCircle } from "lucide-react";
+
+const builds = [
+  {
+    title: "feat: add user authentication",
+    branch: "main",
+    time: "2 minutes ago",
+    duration: "3m 24s",
+    passed: 24,
+    failed: 0,
+    status: "Success",
+    version: "v1.2.3",
+  },
+  {
+    title: "refactor: optimize dashboard performance",
+    branch: "feature/dashboard",
+    time: "5 minutes ago",
+    duration: "2m 15s",
+    passed: 24,
+    failed: 0,
+    status: "Running",
+    version: "",
+  },
+  {
+    title: "fix: resolve memory leak in component",
+    branch: "main",
+    time: "1 hour ago",
+    duration: "4m 12s",
+    passed: 24,
+    failed: 0,
+    status: "Success",
+    version: "",
+  },
+  {
+    title: "add: new API endpoints for user management",
+    branch: "feature/api-integration",
+    time: "3 hours ago",
+    duration: "1m 45s",
+    passed: 20,
+    failed: 4,
+    status: "Failure",
+    version: "",
+  },
+];
+
+const StatCard = ({ title, value, subtext, icon }) => (
+  <div className="bg-white shadow p-4 rounded-2xl flex-1">
+    <div className="flex items-center gap-2 text-gray-600 text-sm font-medium">
+      {icon}
+      {title}
+    </div>
+    <div className="text-2xl font-bold mt-1">{value}</div>
+    <div className="text-green-500 text-xs">{subtext}</div>
+  </div>
+);
+
+const BuildCard = ({ build }) => {
+  const statusColor = {
+    Success: "text-green-600",
+    Failure: "text-red-600",
+    Running: "text-blue-500",
+  }[build.status];
+
+  return (
+    <div className="bg-white rounded-xl p-4 shadow w-full max-w-xl">
+      <div className="flex justify-between items-center">
+        <h3 className="font-semibold">{build.title}</h3>
+        <span className={`${statusColor} font-semibold text-sm`}>
+          {build.status}
+        </span>
+      </div>
+      <div className="text-sm text-gray-500 mt-1">
+        <GitBranch size={14} className="inline-block mr-1" />
+        {build.branch} • {build.time}
+      </div>
+      <div className="flex justify-between items-center mt-4 text-sm">
+        <div>
+          <span className="font-medium">⏱️ {build.duration}</span>
+        </div>
+        <div>
+          ✅ {build.passed} | ❌ {build.failed}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function Dashboard() {
+  return (
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">⚡ Project Dashboard</h1>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm flex items-center gap-1">
+          <PlayCircle size={16} />
+          Start Build
+        </button>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <StatCard
+          title="Success Rate"
+          value="98.2%"
+          subtext="+2.1% from last week"
+          icon={<CheckCircle size={16} />}
+        />
+        <StatCard
+          title="Avg Build Time"
+          value="3m 24s"
+          subtext="-15s from last week"
+          icon={<Clock size={16} />}
+        />
+        <StatCard
+          title="Releases"
+          value="127"
+          subtext="+12 this week"
+          icon={<Zap size={16} />}
+        />
+      </div>
+
+      {/* Recent Builds */}
+      <h2 className="font-semibold mb-4">Recent Builds</h2>
+      <div className="space-y-4">
+        {builds.map((b, i) => (
+          <BuildCard key={i} build={b} />
+        ))}
+      </div>
+    </div>
+  );
+}
